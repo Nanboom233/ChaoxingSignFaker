@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2025-2026, @aquamarine5 (@海蓝色的咕咕鸽). All Rights Reserved.
  * Author: aquamarine5@163.com (Github: https://github.com/aquamarine5) and Brainspark (previously RenegadeCreation)
  * Repository: https://github.com/aquamarine5/ChaoxingSignFaker
@@ -6,7 +6,6 @@
 
 package org.aquamarine5.brainspark.chaoxingsignfaker.screen
 
-import android.content.ClipboardManager
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -36,12 +35,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -82,15 +79,10 @@ import org.aquamarine5.brainspark.chaoxingsignfaker.ui.theme.FontGilroy
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.LocalImageLoader
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.LocalSnackbarHostState
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.OnlyAppDevelopedMode
-import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.UMengHelper
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.chaoxingDataStore
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.disableComposableCode
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.displaySnackbar
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.isDevelopedMode
-import org.aquamarine5.brainspark.stackbricks.StackbricksComponent
-import org.aquamarine5.brainspark.stackbricks.StackbricksEventTrigger
-import org.aquamarine5.brainspark.stackbricks.StackbricksService
-import org.aquamarine5.brainspark.stackbricks.StackbricksVersionData
 
 @Serializable
 object SettingGraphDestination
@@ -98,19 +90,10 @@ object SettingGraphDestination
 @Serializable
 object SettingDestination
 
-private const val BYPASS_BLOCKED_CHECKING_KEY = "ggg1215love"
-
-@OnlyAppDevelopedMode
-private const val COMMAND_SET_RANK_COUNT_PREFIX = "setRankCount"
-
-@OnlyAppDevelopedMode
-private const val COMMAND_ALWAYS_FORCE_SIGN_PREFIX = "alwaysForceSign "
-
 var isAlwaysForceSign by mutableStateOf(false)
 
 @Composable
 fun SettingScreen(
-    stackbricksService: StackbricksService,
     naviToLoginScreen: () -> Unit,
     naviToFavoriteLocationSetting: () -> Unit = {}
 ) {
@@ -125,146 +108,16 @@ fun SettingScreen(
         val hapticFeedback = LocalHapticFeedback.current
         val coroutineScope = rememberCoroutineScope()
         val snackbarHostState = LocalSnackbarHostState.current
-        val userEntity = remember { ChaoxingHttpClient.instance!!.userEntity }
         val displayUserEntity =
             (ChaoxingHttpClient.cloneInstance ?: ChaoxingHttpClient.instance!!).userEntity
         var isShowSignoffDialog by remember { mutableStateOf(false) }
         val allRecommendHabits = remember { mutableStateListOf<RecommendHabit>() }
-        var isBypassBlockedChecking by remember { mutableStateOf(false) }
-        var isUnblockDialog by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             context.chaoxingDataStore.data.first().apply {
-                isBypassBlockedChecking = bypassBlockedChecking
                 isRecommendEnabled = disableRecommend.not()
                 allRecommendHabits.addAll(recommendHabitsList)
             }
-            launch(Dispatchers.IO) {
-                stackbricksService.deleteTemp()
-            }
         }
-        if (isUnblockDialog) {
-            var inputPassword by remember { mutableStateOf("") }
-            SnackbarAlertDialog(onDismissRequest = {
-                isUnblockDialog = false
-            }, title = {
-                Text("输入密码：")
-            }, text = {
-                TextField(inputPassword, onValueChange = {
-                    inputPassword = it
-                }, label = {
-                    Text("密码")
-                })
-            }, dismissButton = {
-                OutlinedButton(onClick = {
-                    hapticFeedback.performHapticFeedback(HapticFeedbackType.ContextClick)
-                    isUnblockDialog = false
-                }) {
-                    Text("取消")
-                }
-            }, confirmButton = {
-                Button(onClick = {
-                    if (inputPassword == BYPASS_BLOCKED_CHECKING_KEY) {
-                        hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
-                        coroutineScope.launch(Dispatchers.IO) {
-                            isBypassBlockedChecking = true
-                            snackbarHostState.displaySnackbar(
-                                "成功解锁@BypassBlockedChecking",
-                                coroutineScope
-                            )
-                            context.chaoxingDataStore.updateData {
-                                it.toBuilder().setBypassBlockedChecking(true).build()
-                            }
-                        }
-                    } else if (inputPassword.startsWith(COMMAND_SET_RANK_COUNT_PREFIX)) {
-                        inputPassword.substringAfter(COMMAND_SET_RANK_COUNT_PREFIX).toIntOrNull()
-                            ?.let { count ->
-                                coroutineScope.launch(Dispatchers.IO) {
-                                    context.chaoxingDataStore.updateData {
-                                        it.toBuilder().setPreferences(
-                                            it.preferences.toBuilder()
-                                                .setDisplayRankCount(count.coerceAtLeast(5))
-                                        ).build()
-                                    }
-                                    snackbarHostState.displaySnackbar(
-                                        "已设置排行榜显示数量为$count",
-                                        coroutineScope
-                                    )
-                                }
-                            }
-                    } else if (inputPassword.startsWith(COMMAND_ALWAYS_FORCE_SIGN_PREFIX)) {
-                        inputPassword.substringAfter(COMMAND_ALWAYS_FORCE_SIGN_PREFIX)
-                            .toBooleanStrictOrNull()
-                            ?.let { value ->
-                                coroutineScope.launch(Dispatchers.IO) {
-                                    context.chaoxingDataStore.updateData {
-                                        it.toBuilder().setPreferences(
-                                            it.preferences.toBuilder()
-                                                .setAlwaysForceSign(value)
-                                        ).build()
-                                    }
-                                    snackbarHostState.displaySnackbar(
-                                        "已设置${if (value) "总是强制签到" else "不总是强制签到"}",
-                                        coroutineScope
-                                    )
-                                }
-                            }
-                    } else {
-                        snackbarHostState.displaySnackbar(
-                            "密码错误",
-                            coroutineScope
-                        )
-                    }
-                }) {
-                    Text("确认")
-                }
-            })
-        }
-        StackbricksComponent(
-            stackbricksService,
-            trigger = object : StackbricksEventTrigger() {
-                override fun onChannelChanged(isTestChannel: Boolean) {
-                    UMengHelper.onStackbricksTestChannelChangedEvent(
-                        context,
-                        userEntity,
-                        isTestChannel
-                    )
-                }
-
-                override fun onCheckUpdate(isTestChannel: Boolean) {
-                    UMengHelper.onStackbricksCheckUpdateEvent(context, userEntity)
-                }
-
-                override fun onCheckUpdateOnLaunchChanged(isChecked: Boolean) {
-                    UMengHelper.onStackbricksCheckOnLaunchChangedEvent(
-                        context,
-                        userEntity,
-                        isChecked
-                    )
-                }
-
-                override fun onDownloadPackage() {
-
-                }
-
-                override fun onInstallPackage(
-                    isTestChannel: Boolean,
-                    versionData: StackbricksVersionData
-                ) {
-                    if (isTestChannel)
-                        UMengHelper.onStackbricksInstallTestChannelEvent(
-                            context,
-                            userEntity,
-                            versionData
-                        )
-                    else
-                        UMengHelper.onStackbricksInstallNewestEvent(
-                            context,
-                            userEntity,
-                            versionData
-                        )
-                }
-            }
-        )
         Spacer(modifier = Modifier.height(8.dp))
         if (isShowSignoffDialog) {
             SnackbarAlertDialog(
@@ -292,7 +145,6 @@ fun SettingScreen(
                                         .clearLoginSession()
                                         .build()
                                 }
-                                UMengHelper.profileSignOff()
                                 naviToLoginScreen()
                             }
                         }
@@ -603,52 +455,13 @@ fun SettingScreen(
         }
 
         Spacer(modifier = Modifier.height(8.dp))
-        var clickCount by remember { mutableIntStateOf(0) }
         Text(
             "ChaoxingSignFaker ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})," +
-                    " channel: ${BuildConfig.umengChannel}," +
                     " buildDate: ${BuildConfig.releaseDate}," +
-                    " " +
-                    "${if (isBypassBlockedChecking) " BypassBlockedChecking," else ""} " +
                     "developed by @aquamarine5, All Rights Reserved.",
             fontSize = 10.sp,
             lineHeight = 12.sp,
-            color = Color.Gray,
-            modifier = Modifier.clickable {
-                if (isBypassBlockedChecking || clickCount++ == 0) {
-                    val clipboard =
-                        context.getSystemService(ClipboardManager::class.java)?.primaryClip?.getItemAt(
-                            0
-                        )?.text
-                    if (clipboard == BYPASS_BLOCKED_CHECKING_KEY) {
-                        isBypassBlockedChecking = true
-                        snackbarHostState.displaySnackbar(
-                            "成功解锁@BypassBlockedChecking",
-                            coroutineScope
-                        )
-                        coroutineScope.launch(Dispatchers.IO) {
-                            context.chaoxingDataStore.updateData {
-                                it.toBuilder().setBypassBlockedChecking(true).build()
-                            }
-                        }
-                    } else {
-                        isUnblockDialog = true
-                    }
-                } else if (clickCount >= 2)
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        "orpheus://playlist/13697614404".toUri()
-                    ).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
-                        if (context.packageManager.resolveActivity(this, 0) != null) {
-                            context.startActivity(this)
-                        } else {
-                            this.data = "https://music.163.com/playlist?id=13697614404".toUri()
-                            context.startActivity(this)
-                        }
-                    }
-            }
+            color = Color.Gray
         )
         Spacer(modifier = Modifier.height(8.dp))
         var isUiDevelopedMode by remember { mutableStateOf(isDevelopedMode) }

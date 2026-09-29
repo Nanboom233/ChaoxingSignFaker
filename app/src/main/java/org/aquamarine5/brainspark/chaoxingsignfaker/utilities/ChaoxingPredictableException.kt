@@ -10,8 +10,6 @@ open class ChaoxingPredictableException(
     override val message: String?,
     throwable: Throwable? = null
 ) : Throwable(message, throwable) {
-    class ApplicationIllegalChannelException(cause: Throwable? = null) :
-        Exception("Illegal channel detected. Please check your app version and channel.", cause)
 }
 
 open class ChaoxingParseDataException(

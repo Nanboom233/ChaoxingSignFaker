@@ -38,7 +38,6 @@ import org.aquamarine5.brainspark.chaoxingsignfaker.entity.ChaoxingEasemobIMConf
 import org.aquamarine5.brainspark.chaoxingsignfaker.entity.ChaoxingOtherUserSharedEntity
 import org.aquamarine5.brainspark.chaoxingsignfaker.entity.ChaoxingUserEntity
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.ChaoxingParseDataException
-import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.UMengHelper
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.chaoxingDataStore
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.checkPredictable
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.checkResponseThrowException
@@ -273,9 +272,7 @@ class ChaoxingHttpClient private constructor(
                 }
                 .build()
             login(client, phoneNumber, password, context)
-            val userInfo = getInfo(client, context, phoneNumber).apply {
-                UMengHelper.profileSignIn(this, phoneNumber)
-            }
+            val userInfo = getInfo(client, context, phoneNumber)
             val session = context.chaoxingDataStore.data.first().loginSession
             return@withContext ChaoxingHttpClient(
                 client,

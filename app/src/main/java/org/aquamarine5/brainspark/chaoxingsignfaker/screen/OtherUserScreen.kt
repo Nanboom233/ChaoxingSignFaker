@@ -178,7 +178,6 @@ import org.aquamarine5.brainspark.chaoxingsignfaker.entity.ImportOtherUserResult
 import org.aquamarine5.brainspark.chaoxingsignfaker.entity.getResultTips
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.ChaoxingPredictableException
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.LocalSnackbarHostState
-import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.UMengHelper
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.chaoxingDataStore
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.checkPredictable
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.displaySnackbar
@@ -605,10 +604,6 @@ fun OtherUserScreen(
                                     .show()
                                 when (result.first) {
                                     ChaoxingImportOtherUserResultStatus.SUCCESS -> {
-                                        UMengHelper.onAccountOtherUserAddEvent(
-                                            context,
-                                            result.third
-                                        )
                                         otherUserSessions.add(result.third)
                                         userTagList.add(mutableStateOf(emptyList()))
                                     }
@@ -1880,10 +1875,6 @@ fun OtherUserScreen(
                                         .show()
                                     when (result.first) {
                                         ChaoxingImportOtherUserResultStatus.SUCCESS -> {
-                                            UMengHelper.onAccountOtherUserAddEvent(
-                                                context,
-                                                result.third
-                                            )
                                             otherUserSessions.add(result.third)
                                             userTagList.add(mutableStateOf(emptyList()))
                                         }
@@ -2939,10 +2930,6 @@ fun OtherUserScreen(
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.Confirm)
                                     when (result.first) {
                                         ChaoxingImportOtherUserResultStatus.SUCCESS -> {
-                                            UMengHelper.onAccountOtherUserAddEvent(
-                                                context,
-                                                result.third
-                                            )
                                             otherUserSessions.add(result.third)
                                             userTagList.add(mutableStateOf(emptyList()))
                                         }

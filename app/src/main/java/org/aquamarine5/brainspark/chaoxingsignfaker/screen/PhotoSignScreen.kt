@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2025-2026, @aquamarine5 (@海蓝色的咕咕鸽). All Rights Reserved.
  * Author: aquamarine5@163.com (Github: https://github.com/aquamarine5) and Brainspark (previously RenegadeCreation)
  * Repository: https://github.com/aquamarine5/ChaoxingSignFaker
@@ -92,7 +92,7 @@ import org.aquamarine5.brainspark.chaoxingsignfaker.entity.ChaoxingSignStatus
 import org.aquamarine5.brainspark.chaoxingsignfaker.signer.ChaoxingPhotoSigner
 import org.aquamarine5.brainspark.chaoxingsignfaker.signer.ChaoxingSignHandler
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.LocalSnackbarHostState
-import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.UMengHelper
+import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.LocalUsageHelper
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.decodePhotoBitmap
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.randomizeStylizeImage
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.snackbarReport
@@ -317,7 +317,7 @@ fun PhotoSignScreen(
                                     destination = destination,
                                     onSigningFinished = { _, name, isOtherUser ->
                                         coroutineScope.launch {
-                                            UMengHelper.onSignClickEvent(context, name, isOtherUser)
+                                            LocalUsageHelper.onSignClickEvent(context, name, isOtherUser)
                                         }
                                     },
                                     onAllSigningFinished = { isSuccessful ->
@@ -530,7 +530,7 @@ fun PhotoSignScreen(
                                             },
                                             onSigningFinished = { _, name, isOtherUser ->
                                                 coroutineScope.launch {
-                                                    UMengHelper.onSignPhotoEvent(
+                                                    LocalUsageHelper.onSignPhotoEvent(
                                                         context,
                                                         name,
                                                         isOtherUser
@@ -843,7 +843,7 @@ fun PhotoSignScreen(
                                                                     }
                                                                 }
                                                         } else isSignSuccess = true
-                                                        UMengHelper.onSignPhotoEvent(
+                                                        LocalUsageHelper.onSignPhotoEvent(
                                                             context,
                                                             ChaoxingHttpClient.instance!!.userEntity.name
                                                         )

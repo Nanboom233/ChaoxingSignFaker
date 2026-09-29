@@ -11,19 +11,13 @@
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <include
+        <exclude
             domain="file"
-            path="/datastore/." />
-        <include
-            domain="file"
-            path="face_images/" />
+            path="." />
     </cloud-backup>
     <device-transfer>
-        <include
+        <exclude
             domain="file"
-            path="/datastore/." />
-        <include
-            domain="file"
-            path="face_images/" />
+            path="." />
     </device-transfer>
 </data-extraction-rules>

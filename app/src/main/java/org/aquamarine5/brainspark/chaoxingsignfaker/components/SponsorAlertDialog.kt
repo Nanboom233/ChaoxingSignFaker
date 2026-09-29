@@ -64,7 +64,6 @@ import org.aquamarine5.brainspark.chaoxingsignfaker.R
 import org.aquamarine5.brainspark.chaoxingsignfaker.api.ChaoxingHttpClient
 import org.aquamarine5.brainspark.chaoxingsignfaker.ui.theme.FontGilroy
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.LocalSnackbarHostState
-import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.UMengHelper
 import org.aquamarine5.brainspark.chaoxingsignfaker.utilities.displaySnackbar
 import java.io.File
 
@@ -87,7 +86,7 @@ fun SponsorAlertDialog(onDismissRequest: () -> Unit) {
                 ChaoxingHttpClient.instance?.okHttpClient?.newCall(
                     Request.Builder()
                         .get()
-                        .url("http://cdn.aquamarine5.fun/chaoxingsignfaker_sponsor.json")
+                        .url("https://cdn.aquamarine5.fun/chaoxingsignfaker_sponsor.json")
                         .build()
                 )?.execute().use {
                     val json = JSONObject.parseObject(it?.body?.string())
@@ -227,10 +226,6 @@ fun SponsorAlertDialog(onDismissRequest: () -> Unit) {
                                 coroutineScope
                             )
                         }
-                        UMengHelper.onGotoSponsorWechatEvent(
-                            context,
-                            ChaoxingHttpClient.instance!!.userEntity
-                        )
                     }
             }) {
                 Text("现在就去")

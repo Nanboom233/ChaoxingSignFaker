@@ -25,7 +25,7 @@ var isDevelopedMode by mutableStateOf(false)
 object DataStoreSerializer : Serializer<ChaoxingSignFakerDataStore> {
     override val defaultValue: ChaoxingSignFakerDataStore
         get() = ChaoxingSignFakerDataStore.newBuilder()
-            .setAgreeTerms(false)
+            .setAgreeTerms(true)
             .build()
 
     override suspend fun readFrom(input: InputStream): ChaoxingSignFakerDataStore =

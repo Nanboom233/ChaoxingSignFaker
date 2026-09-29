@@ -18,11 +18,8 @@
  </a>
 </p>
 
-> [!NOTE]
-> 很抱歉在2026-9-18凌晨发布的`1.18.3-stable`在打开主页面时遇到的崩溃问题，影响了程序的正常使用，请所有还在使用`1.18.3-stable`的版本更新到[`1.19.0-stable`](https://github.com/aquamarine5/ChaoxingSignFaker/releases/tag/1.19.0-stable)。为此造成的不便作者深表歉意，在后续的版本更新中会加强代码测试环境，避免此类恶性事件的再次发生。
-
 > [!CAUTION]
-> ChaoxingSignFaker（随地大小签）是一个开源应用，使用AGPLv3.0许可证发布。开源代码本源为让源代码对所有人开发，保持代码的开放性并欢迎任何人参与到项目的开发中来，但**不欢迎**任何形式的修改代码、名称等进行二次分发、换皮和商业化等行为。
+> 该Repo为ChaoxingSignFaker的分支，在遵守 AGPL-3.0 协议的基础下移除了反渠道分发、远程封禁、以及大量的遥测（Umeng 上报账号、手机号、姓名、签到类型、位置等信息，Supabase 上传签到统计、学校和用户标识）。即便是为”合规性考虑“，大量收集这些深度隐私数据实在不妥。
 
 > [!IMPORTANT]
 > ChaoxingSignFaker（随地大小签）仅作为交流学习使用，通过本项目加深前端设计、接口调用、数据库使用、网络通信安全等方面知识的理解。请勿将此项目用作商业用途。任何人或组织使用项目或项目中的代码进行的任何不正当违规和违法行为与作者无关，作者不承担任何因使用本应用而导致的法律或其他任何责任。
@@ -33,7 +30,6 @@
 > ChaoxingSignFaker（随地大小签）需要Android 8.0+（`minSdk>=26`）版本。  
 > 此应用**并不支持**iPhone、iPad以及鸿蒙（仅HarmonyOS NEXT）操作系统，也并没有准备适配的计划，不过可以使用任意安卓手机在代签选项页通过账号密码登录从而为您的账号使用应用的大部分签到功能。
 
-- 前往 [cdn.aquamarine5.fun](http://cdn.aquamarine5.fun) 下载最新版本。
 - 或前往 [Releases](https://github.com/aquamarine5/ChaoxingSignFaker) 的附件下载最新版本。
 
 ## 功能
@@ -51,28 +47,3 @@
 - 完成签到之后的发布的签退操作
 - 手势签到和验证码签到
 - 群聊签到和人脸识别签到
-
-## 开发
-
-- 详见[CONTRIBUTING.md](./CONTRIBUTING.md)
-
-## About Brainspark Project
-
-- Brainspark 项目是 @aquamarine5 日常头脑风暴的一部分, Code Anything Possible。
-
-> [!TIP]
-> ChaoxingSignFaker（随地大小签） 使用 [Stackbricks](https://github.com/aquamarine5/Stackbricks) 来实现更新逻辑，同样由本作者维护。
-
-<a href="https://www.star-history.com/?repos=aquamarine5%2FChaoxingSignFaker&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=aquamarine5/ChaoxingSignFaker&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=aquamarine5/ChaoxingSignFaker&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=aquamarine5/ChaoxingSignFaker&type=date&legend=top-left" />
- </picture>
-</a>
-
-![Recorded sign counts](analysis/signCount.svg)
-
-![Analyser user counts](analysis/userCount.svg)
-
-![Alt](https://repobeats.axiom.co/api/embed/629e66a936ab63b8d91a7dceb42437d55857900e.svg "Repobeats analytics image")

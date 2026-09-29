@@ -12,10 +12,7 @@
    See https://developer.android.com/about/versions/12/backup-restore
 -->
 <full-backup-content>
-    <include
+    <exclude
         domain="file"
-        path="/datastore/." />
-    <include
-        domain="file"
-        path="face_images/" />
+        path="." />
 </full-backup-content>
