@@ -137,6 +137,8 @@ fun GetLocationComponent(
             )
         )
         if (locationPermissionsState.allPermissionsGranted) {
+            LocationClient.setAgreePrivacy(true)
+            SDKInitializer.setAgreePrivacy(context.applicationContext, true)
             val isInitialized = remember { SDKInitializer.isInitialized() }
             if (!isInitialized) {
                 SDKInitializer.initialize(context.applicationContext)

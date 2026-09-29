@@ -7,7 +7,6 @@
 package org.aquamarine5.brainspark.chaoxingsignfaker.screen
 
 import android.graphics.Bitmap
-import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -55,8 +54,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -131,7 +128,6 @@ data class PhotoSignDestination(
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PhotoSignScreen(
     destination: PhotoSignDestination,
@@ -761,34 +757,7 @@ fun PhotoSignScreen(
                                     BackHandler(isSignForOther == false) {
                                         isSignForOther = null
                                     }
-                                    val isNeedPermission =
-                                        Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-                                    val permissionState = if (isNeedPermission) {
-                                        rememberMultiplePermissionsState(listOf(android.Manifest.permission.READ_EXTERNAL_STORAGE))
-                                    } else null
-
-                                    if (isNeedPermission && permissionState?.allPermissionsGranted != true) {
-                                        Column(
-                                            modifier = Modifier.fillMaxSize(),
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-                                            verticalArrangement = Arrangement.Center
-                                        ) {
-                                            Text("请授予应用读取图片权限")
-                                            Spacer(modifier = Modifier.height(8.dp))
-                                            Button(
-                                                onClick = {
-                                                    hapticFeedback.performHapticFeedback(
-                                                        HapticFeedbackType.ContextClick
-                                                    )
-                                                    permissionState?.launchMultiplePermissionRequest()
-                                                },
-                                                modifier = Modifier.align(Alignment.CenterHorizontally)
-                                            ) {
-                                                Text("授予")
-                                            }
-                                        }
-                                    } else {
-                                        if (isShowPhotoPicker) ChaoxingCloudDriveHelper.GetPhotoFromMediaStore { uri ->
+                                    if (isShowPhotoPicker) ChaoxingCloudDriveHelper.GetPhotoFromMediaStore { uri ->
                                             if (uri == null) {
                                                 return@GetPhotoFromMediaStore
                                             }
@@ -897,7 +866,6 @@ fun PhotoSignScreen(
                                                 }
                                             }
                                         }
-                                    }
                                 }
                             }
                         }

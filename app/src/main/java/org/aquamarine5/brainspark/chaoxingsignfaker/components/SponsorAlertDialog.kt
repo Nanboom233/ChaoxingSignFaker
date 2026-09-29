@@ -110,7 +110,7 @@ fun SponsorAlertDialog(onDismissRequest: () -> Unit) {
     }
     val hapticFeedback = LocalHapticFeedback.current
     val permissionCheck =
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) rememberPermissionState(
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) rememberPermissionState(
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) else null
 

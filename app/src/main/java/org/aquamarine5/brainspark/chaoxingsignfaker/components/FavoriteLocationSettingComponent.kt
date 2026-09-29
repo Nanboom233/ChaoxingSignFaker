@@ -139,6 +139,8 @@ fun FavoriteLocationSettingComponent(modifier: Modifier = Modifier) {
         }
     }
     if (locationPermissionsState.allPermissionsGranted) {
+        LocationClient.setAgreePrivacy(true)
+        SDKInitializer.setAgreePrivacy(context.applicationContext, true)
         val isInitialized = remember { SDKInitializer.isInitialized() }
         if (!isInitialized) {
             SDKInitializer.initialize(context.applicationContext)

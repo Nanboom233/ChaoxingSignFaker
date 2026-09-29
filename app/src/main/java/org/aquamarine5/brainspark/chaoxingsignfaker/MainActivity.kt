@@ -80,8 +80,6 @@ import coil3.disk.DiskCache
 import coil3.disk.directory
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.crossfade
-import com.baidu.location.LocationClient
-import com.baidu.mapapi.SDKInitializer
 import io.sentry.Sentry
 import io.sentry.android.core.SentryAndroid
 import kotlinx.coroutines.Dispatchers
@@ -180,8 +178,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        LocationClient.setAgreePrivacy(true)
-        SDKInitializer.setAgreePrivacy(applicationContext, true)
         enableEdgeToEdge()
         setContent {
             val hapticFeedback = LocalHapticFeedback.current
